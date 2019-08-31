@@ -72,7 +72,7 @@ def check_max_seq_len(value):
 
 
 def get_args_parser():
-    from .graph import PoolingStrategy
+    from graph import PoolingStrategy
 
     parser = argparse.ArgumentParser(description='Start a BertServer for serving')
 
