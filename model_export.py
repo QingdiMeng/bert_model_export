@@ -38,10 +38,10 @@ def input_fn_builder():
     def gen():
         for i in range(100):
             yield {
-                "unique_ids": tf.constant([1], dtype=tf.int32),
-                "input_ids": tf.constant([[1, 2, 3, 4]], dtype=tf.int32),
-                "input_mask": tf.constant([[1, 1, 1, 1]], dtype=tf.int32),
-                "input_type_ids": tf.constant([0, 0, 0, 0], dtype=tf.int32),
+                "unique_ids": [1],
+                "input_ids": [[1, 2, 3, 4]],
+                "input_mask": [[1, 1, 1, 1]],
+                "input_type_ids": [[0, 0, 0, 0]]
             }
 
     def input_fn():
