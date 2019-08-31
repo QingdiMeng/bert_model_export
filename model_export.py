@@ -77,7 +77,7 @@ tf = import_tf(device_id=-1, verbose=args.verbose, use_fp16=args.fp16)
 estimator = get_estimator(args=args, tf=tf, graph_path=graph_path)
 
 save_hook = tf.train.CheckpointSaverHook(checkpoint_dir=args.export_dir, save_secs=1)
-predicts = estimator.predict(input_fn=input_fn_builder, hooks=[save_hook])
+predicts = estimator.predict(input_fn=input_fn_builder(), hooks=[save_hook])
 
 for predict in predicts:
     print(predict)
