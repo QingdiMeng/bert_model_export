@@ -6,8 +6,8 @@ from enum import Enum
 
 from termcolor import colored
 
-from .bert import modeling
-from .helper import import_tf, set_logger
+from bert import modeling
+from helper import import_tf, set_logger
 
 __all__ = ['PoolingStrategy', 'optimize_graph']
 
