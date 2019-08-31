@@ -54,10 +54,11 @@ logger.info('use device %s, load graph from %s' % ('cpu', graph_path))
 tf = import_tf(device_id=-1, verbose=args.verbose, use_fp16=args.fp16)
 estimator = get_estimator(args=args, tf=tf, graph_path=graph_path)
 
-save_hook = tf.train.CheckpointSaverHook(checkpoint_dir=args.export_dir, save_steps=1)
+save_hook = tf.train.CheckpointSaverHook(checkpoint_dir=args.export_dir, save_secs=1)
 predicts = estimator.predict(input_fn=predict_input_fn, hooks=[save_hook])
 
-print(predicts)
+for predict in predicts:
+    print(predict)
 
 feature_spec = {
     "unique_ids": tf.placeholder(dtype=tf.int32, shape=[None],  name="unique_ids"),
