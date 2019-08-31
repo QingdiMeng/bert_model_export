@@ -3,7 +3,7 @@ from graph import optimize_graph
 from helper import get_run_args, set_logger, import_tf
 
 
-def get_estimator(tf, graph_path):
+def get_estimator(args, tf, graph_path):
     from tensorflow.python.estimator.estimator import Estimator
     from tensorflow.python.estimator.run_config import RunConfig
     from tensorflow.python.estimator.model_fn import EstimatorSpec
@@ -30,7 +30,7 @@ def get_estimator(tf, graph_path):
     # if args.xla:
     #     config.graph_options.optimizer_options.global_jit_level = tf.OptimizerOptions.ON_1
 
-    return Estimator(model_fn=model_fn, config=RunConfig(session_config=config))
+    return Estimator(model_fn=model_fn, model_dir=args.model_dir, config=RunConfig(session_config=config))
 
 
 def predict_input_fn():
@@ -54,8 +54,8 @@ logger.info('use device %s, load graph from %s' % ('cpu', graph_path))
 tf = import_tf(device_id=-1, verbose=args.verbose, use_fp16=args.fp16)
 estimator = get_estimator(tf=tf, graph_path=graph_path)
 
-save_hook = tf.train.CheckpointSaverHook(checkpoint_dir=args.export_dir, save_steps=1)
-estimator.predict(input_fn=predict_input_fn, hooks=[save_hook])
+# save_hook = tf.train.CheckpointSaverHook(checkpoint_dir=args.export_dir, save_steps=1)
+# estimator.predict(input_fn=predict_input_fn, hooks=[save_hook])
 
 feature_spec = {
     "unique_ids": tf.placeholder(dtype=tf.int32, shape=[None],  name="unique_ids"),
