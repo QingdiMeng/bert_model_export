@@ -33,13 +33,35 @@ def get_estimator(args, tf, graph_path):
     return Estimator(model_fn=model_fn, config=RunConfig(session_config=config))
 
 
-def predict_input_fn():
-    return {
-        "unique_ids": tf.constant([1], dtype=tf.int32),
-        "input_ids": tf.constant([[1,2,3,4]], dtype=tf.int32),
-        "input_mask": tf.constant([[1,1,1,1]], dtype=tf.int32),
-        "input_type_ids": tf.constant([0,0,0,0], dtype=tf.int32),
-    }
+def input_fn_builder():
+
+    def gen():
+        for i in range(100):
+            yield {
+                "unique_ids": tf.constant([1], dtype=tf.int32),
+                "input_ids": tf.constant([[1, 2, 3, 4]], dtype=tf.int32),
+                "input_mask": tf.constant([[1, 1, 1, 1]], dtype=tf.int32),
+                "input_type_ids": tf.constant([0, 0, 0, 0], dtype=tf.int32),
+            }
+
+    def input_fn():
+        return (tf.data.Dataset.from_generator(
+            gen,
+            output_types={
+                "unique_ids": tf.int32,
+                "input_ids": tf.int32,
+                "input_mask": tf.int32,
+                "input_type_ids": tf.int32,
+            },
+            output_shapes={
+                "unique_ids": [None],
+                "input_ids": [None, None],
+                "input_mask": [None, None],
+                "input_type_ids": [None, None],
+            }
+        ))
+
+    return input_fn
 
 args = get_run_args()
 
@@ -55,7 +77,7 @@ tf = import_tf(device_id=-1, verbose=args.verbose, use_fp16=args.fp16)
 estimator = get_estimator(args=args, tf=tf, graph_path=graph_path)
 
 save_hook = tf.train.CheckpointSaverHook(checkpoint_dir=args.export_dir, save_secs=1)
-predicts = estimator.predict(input_fn=predict_input_fn, hooks=[save_hook])
+predicts = estimator.predict(input_fn=input_fn_builder, hooks=[save_hook])
 
 for predict in predicts:
     print(predict)
