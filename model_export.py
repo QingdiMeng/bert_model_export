@@ -30,7 +30,7 @@ def get_estimator(args, tf, graph_path):
     # if args.xla:
     #     config.graph_options.optimizer_options.global_jit_level = tf.OptimizerOptions.ON_1
 
-    return Estimator(model_fn=model_fn, config=RunConfig(session_config=config))
+    return Estimator(model_fn=model_fn, config=RunConfig(model_dir=args.checkpoint_dir, session_config=config))
 
 
 def input_fn_builder():
@@ -76,7 +76,7 @@ logger.info('use device %s, load graph from %s' % ('cpu', graph_path))
 tf = import_tf(device_id=-1, verbose=args.verbose, use_fp16=args.fp16)
 estimator = get_estimator(args=args, tf=tf, graph_path=graph_path)
 
-save_hook = tf.train.CheckpointSaverHook(checkpoint_dir=args.export_dir, save_secs=1)
+save_hook = tf.train.CheckpointSaverHook(checkpoint_dir=args.checkpoint_dir, save_secs=1)
 predicts = estimator.predict(input_fn=input_fn_builder(), hooks=[save_hook])
 
 for predict in predicts:

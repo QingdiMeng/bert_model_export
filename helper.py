@@ -89,6 +89,8 @@ def get_args_parser():
                         help='filename of the JSON config file for BERT model.')
     group1.add_argument('-graph_tmp_dir', type=str, default=None,
                         help='path to graph temp file')
+    group1.add_argument('-checkpoint_dir', type=str, required=True,
+                        help='directory to temp save checkpoint before export saved model')
     group1.add_argument('-export_dir', type=str, required=True,
                         help='directory to export saved model')
 
