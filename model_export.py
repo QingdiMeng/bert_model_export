@@ -24,10 +24,10 @@ def get_estimator(args, tf, graph_path):
             'encodes': output[0]
         })
 
-    config = tf.ConfigProto(device_count={'GPU': 0}, intra_op_parallelism_threads=4, inter_op_parallelism_threads=4)
+    config = tf.ConfigProto(device_count={'GPU': 0}, intra_op_parallelism_threads=32, inter_op_parallelism_threads=32)
     config.log_device_placement = False
-    config.intra_op_parallelism_threads = 4
-    config.inter_op_parallelism_threads = 4
+    config.intra_op_parallelism_threads = 32
+    config.inter_op_parallelism_threads = 32
     # session-wise XLA doesn't seem to work on tf 1.10
     # if args.xla:
     #     config.graph_options.optimizer_options.global_jit_level = tf.OptimizerOptions.ON_1
