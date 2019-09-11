@@ -19,10 +19,16 @@ def get_estimator(args, tf, graph_path):
                                      input_map={k + ':0': features[k] for k in input_names},
                                      return_elements=['final_encodes:0'])
 
-        return EstimatorSpec(mode=mode, predictions={
-            'unique_ids ': features['unique_ids'],
-            'encodes': output[0]
-        })
+        if args.fp16:
+            return EstimatorSpec(mode=mode, predictions={
+                'unique_ids ': features['unique_ids'],
+                'encodes': tf.cast(output[0], tf.float32)
+            })
+        else:
+            return EstimatorSpec(mode=mode, predictions={
+                'unique_ids ': features['unique_ids'],
+                'encodes': output[0]
+            })
 
     config = tf.ConfigProto(device_count={'GPU': 0}, intra_op_parallelism_threads=16, inter_op_parallelism_threads=1)
     config.log_device_placement = False
