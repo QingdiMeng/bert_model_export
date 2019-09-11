@@ -42,8 +42,6 @@ def optimize_graph(args, logger=None):
         from tensorflow.python.tools.optimize_for_inference_lib import optimize_for_inference
 
         config = tf.ConfigProto(device_count={'GPU': 0}, allow_soft_placement=True)
-        config.intra_op_parallelism_threads = 32
-        config.inter_op_parallelism_threads = 32
 
         config_fp = os.path.join(args.model_dir, args.config_name)
         init_checkpoint = os.path.join(args.tuned_model_dir or args.model_dir, args.ckpt_name)
