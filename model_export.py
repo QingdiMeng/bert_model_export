@@ -20,7 +20,6 @@ def get_estimator(args, tf, graph_path):
                                      return_elements=['final_encodes:0'])
 
         return EstimatorSpec(mode=mode, predictions={
-                'unique_ids_out ': features['unique_ids'],
                 'encodes': output[0]
         })
 
