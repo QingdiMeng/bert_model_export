@@ -20,7 +20,7 @@ input_shapes = {
 
 converter = tf.lite.TFLiteConverter.from_saved_model(saved_model_dir=args.saved_model_dir, input_shapes=input_shapes)
 converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_LATENCY]
-converter.target_ops = [tf.lite.OpsSet.TFLITE_BUILTINS, tf.lite.OpsSet.SELECT_TF_OPS]
+converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS, tf.lite.OpsSet.SELECT_TF_OPS]
 
 tflite_quant_model = converter.convert()
 
