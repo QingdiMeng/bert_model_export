@@ -13,9 +13,9 @@ args = parser.parse_args()
 
 input_shapes = {
     "unique_ids": [None],
-    "input_ids_1": [None, None],
-    "input_mask_1": [None, None],
-    "input_type_ids_1": [None, None],
+    "input_ids_1": [None, 25],
+    "input_mask_1": [None, 25],
+    "input_type_ids_1": [None, 25],
 }
 
 converter = tf.lite.TFLiteConverter.from_saved_model(saved_model_dir=args.saved_model_dir, input_shapes=input_shapes)
