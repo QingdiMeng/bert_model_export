@@ -11,7 +11,14 @@ parser.add_argument('-tflite_file', type=str, required=True,
 
 args = parser.parse_args()
 
-converter = tf.lite.TFLiteConverter.from_saved_model(saved_model_dir=args.saved_model_dir)
+input_shapes = {
+    "unique_ids": [None],
+    "input_ids": [None, None],
+    "input_mask": [None, None],
+    "input_type_ids": [None, None],
+}
+
+converter = tf.lite.TFLiteConverter.from_saved_model(saved_model_dir=args.saved_model_dir, input_shapes=input_shapes)
 converter.optimizations = [tf.lite.Optimize.OPTIMIZE_FOR_LATENCY]
 tflite_quant_model = converter.convert()
 
