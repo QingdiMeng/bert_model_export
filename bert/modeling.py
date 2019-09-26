@@ -23,6 +23,7 @@ import math
 import re
 
 import six
+import numpy as np
 import tensorflow as tf
 
 
@@ -262,20 +263,18 @@ class BertModel(object):
         return self.embedding_table
 
 
-def gelu(input_tensor):
+def gelu(x):
     """Gaussian Error Linear Unit.
-
     This is a smoother version of the RELU.
     Original paper: https://arxiv.org/abs/1606.08415
-
     Args:
-      input_tensor: float Tensor to perform activation.
-
+        x: float Tensor to perform activation.
     Returns:
-      `input_tensor` with the GELU activation applied.
+        `x` with the GELU activation applied.
     """
-    cdf = 0.5 * (1.0 + tf.erf(input_tensor / tf.sqrt(2.0)))
-    return input_tensor * cdf
+    cdf = 0.5 * (1.0 + tf.tanh(
+        (np.sqrt(2 / np.pi) * (x + 0.044715 * tf.pow(x, 3)))))
+    return x * cdf
 
 
 def get_activation(activation_string):
