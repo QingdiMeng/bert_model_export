@@ -1,5 +1,6 @@
 import tensorflow as tf
 import time
+import numpy as np
 
 interpreter = tf.lite.Interpreter(model_path="./bert_lite.tflite")
 interpreter.allocate_tensors()
@@ -96,10 +97,10 @@ input_types = [[
 
 for i in range(0, 10):
     start = time.time()
-    interpreter.set_tensor(input_details[0]['index'], input_ids)
-    interpreter.set_tensor(input_details[1]['index'], input_mask)
-    interpreter.set_tensor(input_details[2]['index'], input_types)
-    interpreter.set_tensor(input_details[3]['index'], [i])
+    interpreter.set_tensor(input_details[0]['index'], np.array(input_ids, dtype=np.int))
+    interpreter.set_tensor(input_details[1]['index'], np.array(input_mask, dtype=np.int))
+    interpreter.set_tensor(input_details[2]['index'], np.array(input_types, dtype=np.int))
+    interpreter.set_tensor(input_details[3]['index'], np.array([i], dtype=np.int))
     interpreter.invoke()
     output_data = interpreter.get_tensor(output_details[0]['index'])
     # print(output_data)
