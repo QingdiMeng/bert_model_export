@@ -34,9 +34,11 @@ token_type_ids_tensor = torch.tensor([token_type_ids])
 input_mask_ids_tensor = torch.tensor([input_mask_ids])
 
 with torch.no_grad():
-    start = time.time()
-    print(model(input_ids=input_ids_tensor, attention_mask=input_mask_ids_tensor, token_type_ids=token_type_ids_tensor))
-    print(time.time() - start)
+    for i in range(10):
+        start = time.time()
+        outputs = model(input_ids=input_ids_tensor, attention_mask=input_mask_ids_tensor, token_type_ids=token_type_ids_tensor)
+        # print(outputs[1])
+        print(time.time() - start)
 
 
 # tokenizer.save_pretrained("./transformers_pre_trained_bert_base_chinese")
