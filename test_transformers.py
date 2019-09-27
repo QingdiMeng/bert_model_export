@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 tokenizer = BertTokenizer.from_pretrained("./transformers_pre_trained_bert_base_chinese")
-model = BertModel.from_pretrained("./transformers_pre_trained_bert_base_chinese")
+model = BertModel.from_pretrained("./transformers_pre_trained_bert_base_chinese", torchscript=True)
 model.eval()
 
 # print(tokenizer.encode("我们的世界是什么", add_special_tokens=True))
@@ -33,10 +33,14 @@ input_ids_tensor = torch.tensor([input_ids])
 token_type_ids_tensor = torch.tensor([token_type_ids])
 input_mask_ids_tensor = torch.tensor([input_mask_ids])
 
+traced_model = torch.jit.trace(model, [input_ids_tensor, input_mask_ids_tensor, token_type_ids_tensor])
+torch.jit.save(traced_model, "./traced_bert.pt")
+
 with torch.no_grad():
     for i in range(10):
         start = time.time()
-        outputs = model(input_ids=input_ids_tensor, attention_mask=input_mask_ids_tensor, token_type_ids=token_type_ids_tensor)
+        outputs = traced_model(input_ids_tensor, input_mask_ids_tensor, token_type_ids_tensor)
+        # outputs = model(input_ids=input_ids_tensor, attention_mask=input_mask_ids_tensor, token_type_ids=token_type_ids_tensor)
         # print(outputs[1])
         print(time.time() - start)
 
