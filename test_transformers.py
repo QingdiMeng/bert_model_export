@@ -5,8 +5,8 @@ import time
 import logging
 logging.basicConfig(level=logging.INFO)
 
-tokenizer = BertTokenizer.from_pretrained("bert-base-chinese")
-model = BertModel.from_pretrained("bert-base-chinese")
+tokenizer = BertTokenizer.from_pretrained("./transformers_pre_trained_bert_base_chinese")
+model = BertModel.from_pretrained("./transformers_pre_trained_bert_base_chinese")
 model.eval()
 
 # print(tokenizer.encode("我们的世界是什么", add_special_tokens=True))
@@ -37,3 +37,7 @@ with torch.no_grad():
     start = time.time()
     print(model(input_ids=input_ids_tensor, attention_mask=input_mask_ids_tensor, token_type_ids=token_type_ids_tensor))
     print(time.time() - start)
+
+
+# tokenizer.save_pretrained("./transformers_pre_trained_bert_base_chinese")
+# model.save_pretrained("./transformers_pre_trained_bert_base_chinese")
